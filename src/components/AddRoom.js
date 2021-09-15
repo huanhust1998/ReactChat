@@ -14,16 +14,18 @@ import {
 } from 'reactstrap';
 import firebase from '../Firebase';
 
+const db = firebase;
+
 function AddRoom() {
 
     const history = useHistory();
     const [room, setRoom] = useState({ roomname: '' });
     const [showLoading, setShowLoading] = useState(false);
-    const ref = firebase.database().ref('rooms/');
+    const ref = db.ref('rooms/');
 
     const save = (e) => {
         e.preventDefault();
-        setShowLoading(true);
+        //setShowLoading(true);
         ref.orderByChild('roomname').equalTo(room.roomname).once('value', snapshot => {
             if (snapshot.exists()) {
                 return (
@@ -34,7 +36,7 @@ function AddRoom() {
                     </div>
                 );
             } else {
-                const newRoom = firebase.database().ref('rooms/').push();
+                const newRoom = db.ref('rooms/').push();
                 newRoom.set(room);
                 history.goBack();
                 setShowLoading(false);

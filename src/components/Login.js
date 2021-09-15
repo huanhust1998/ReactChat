@@ -8,46 +8,49 @@ const db = firebase;
 function Login() {
 
     const history = useHistory();
-    const [creds, setCreds] = useState({nickName: ""});
+    const [creds, setCreds] = useState({nickname: ""});
     const [showLoading, setShowLoading] = useState(false);
-    const ref = db.database().ref('users/')
+    const ref = db.ref('users/')
 
     const onChange = (e) => {
         e.persist();
-        setCreds({...creds, [e.target.name]: e.target.value});
+        setCreds({
+            ...creds,
+            nickname: e.target.value
+        })
     }
 
     const login = (e) => {
         e.preventDefault();
         setShowLoading(true);
         ref.orderByChild('nickname').equalTo(creds.nickname).once('value', snapshot => {
+            setShowLoading(false);
             if (snapshot.exists()) {
                 localStorage.setItem('nickname', creds.nickname);
                 history.push('/roomlist');
-                setShowLoading(false);
             } else {
-                const newUser = firebase.database().ref('users/').push();
+                const newUser = db.ref('users/').push();
                 newUser.set(creds);
                 localStorage.setItem('nickname', creds.nickname);
                 history.push('/roomlist');
-                setShowLoading(false);
             }
         });
     };
 
     return (
-        <div>
+        <div className="container-fluid">
             {showLoading &&
             <Spinner color="primary"/>
             }
             <Jumbotron>
                 <Form onSubmit={login}>
                     <FormGroup>
-                        <Label>Nickname</Label>
-                        <Input type="text" name="nickname" id="nickname" placeholder="Enter Your Nickname"
-                               value={creds.nickname} onChange={onChange}/>
+                        <Label>Nickname
+                            <Input type="text" name="nickname" id="nickname" placeholder="Enter Your Nickname"
+                                   value={creds.nickname} onChange={onChange}/>
+                        </Label>
                     </FormGroup>
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" className="mt-3 text-center">
                         Login
                     </Button>
                 </Form>

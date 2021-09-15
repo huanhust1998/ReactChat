@@ -11,9 +11,9 @@ function App() {
         <BrowserRouter>
             <Switch>
                 <Route path="/login" component={Login}></Route>
-                <Route path="/room-list" component={RoomList}></Route>
-                <Route path="/chat-room" component={ChatRoom}></Route>
-                <Route path="/add-room" component={AddRoom}></Route>
+                <Route path="/roomlist" component={RoomList}></Route>
+                <Route path="/chatroom" component={ChatRoom}></Route>
+                <Route path="/addroom" component={AddRoom}></Route>
             </Switch>
         </BrowserRouter>
     );
